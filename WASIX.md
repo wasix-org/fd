@@ -42,7 +42,7 @@ flags and WebC packaging. Dependencies are fixed by the root `Cargo.lock` and
 `.cargo/config.toml`; the tiny portability patches are applied to
 checksum-verified crate archives under ignored `.wasix/deps/`.
 
-Outputs: `.wasix/dist/fd.wasm` and `.wasix/fd-10.5.0.webc`.
+Outputs: `.wasix/dist/fd.wasm` and `.wasix/fd-10.5.1.webc`.
 `.wasix/provenance.json` records the source revision, dirty state, compiler,
 Cargo/cargo-wasix versions, Wasmer version, and lockfile hash. Artifact hashes
 and byte sizes are printed by the build.
@@ -53,10 +53,10 @@ byte, and uploads them with SHA-256 checksums. Reproduce that check with:
 
 ```sh
 cp .wasix/dist/fd.wasm .wasix/first.wasm
-cp .wasix/fd-10.5.0.webc .wasix/first.webc
+cp .wasix/fd-10.5.1.webc .wasix/first.webc
 CARGO_TARGET_DIR=.wasix/repro-target bash wasix/build.sh
 cmp .wasix/first.wasm .wasix/dist/fd.wasm
-cmp .wasix/first.webc .wasix/fd-10.5.0.webc
+cmp .wasix/first.webc .wasix/fd-10.5.1.webc
 ```
 
 The byte comparison uses the same checkout and host toolchain. Cross-host
@@ -84,15 +84,15 @@ spaces, symlinks, filesystem limits, and exit behavior. Commands launched by
 ## Use as a package
 
 ```sh
-wasmer run wasmer/fd@10.5.0 --volume "$PWD:/workspace" -- --no-require-git --glob "*.rs" /workspace
-wasmer run --registry wasmer.wtf wasmer/fd@10.5.0 -- --version
+wasmer run wasmer/fd@10.5.1 --volume "$PWD:/workspace" -- --no-require-git --glob "*.rs" /workspace
+wasmer run --registry wasmer.wtf wasmer/fd@10.5.1 -- --version
 ```
 
 Other Wasmer packages can reference the command without embedding its binary:
 
 ```toml
 [dependencies]
-"wasmer/fd" = "=10.5.0"
+"wasmer/fd" = "=10.5.1"
 
 [[command]]
 name = "fd"
@@ -116,3 +116,7 @@ Packages: [wasmer.io](https://wasmer.io/wasmer/fd) and
 [wasmer.wtf](https://wasmer.wtf/wasmer/fd). To update, change `wasmer.toml`
 and `wasix/build.json` together and publish a new version. Keep license notices
 in the package. CI does not publish or require registry credentials.
+
+Package 10.5.1 stores dependency notices at `/opt/fd/licenses`. This keeps
+license mounts out of `/usr`, where they interfere with Wasmer command installation.
+The compiled utility versions are unchanged.
