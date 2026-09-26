@@ -7,3 +7,8 @@
 rustflags = ["-C", "target-feature=+crt-static"]
 [target.i686-pc-windows-msvc]
 rustflags = ["-C", "target-feature=+crt-static"]
+[source.crates-io]
+replace-with = "wasix"
+
+[source.wasix]
+registry = "sparse+https://cargo-registry.wasix.org/"

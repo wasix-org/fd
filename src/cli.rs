@@ -683,7 +683,7 @@ pub struct Opts {
     /// dictate. With this flag, fd ensures that it does not descend into a
     /// different file system than the one it started in. Comparable to the -mount
     /// or -xdev filters of find(1).
-    #[cfg(any(unix, windows))]
+    #[cfg(any(unix, windows, target_os = "wasi"))]
     #[arg(long, aliases(&["mount", "xdev"]), hide_short_help = true, long_help)]
     pub one_file_system: bool,
 

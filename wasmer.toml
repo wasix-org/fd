@@ -1,0 +1,21 @@
+[package]
+name = "wasmer/fd"
+version = "10.5.0"
+description = "fd compiled to WASIX"
+license = "MIT OR Apache-2.0"
+readme = "WASIX.md"
+repository = "https://github.com/wasix-org/fd"
+entrypoint = "fd"
+
+[fs]
+"/usr/share/licenses/fd" = ".wasix/licenses"
+
+[[module]]
+name = "fd"
+source = ".wasix/dist/fd.wasm"
+abi = "wasi"
+
+[[command]]
+name = "fd"
+module = "fd"
+runner = "wasi"

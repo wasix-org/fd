@@ -618,6 +618,8 @@ impl WorkerState {
         let config = &self.config;
         let walker = self.build_walker(paths)?;
 
+        // WASIX uses the process default SIGINT handler; ctrlc needs Unix APIs.
+        #[cfg(not(target_os = "wasi"))]
         if config.ls_colors.is_some() && config.is_printing() {
             let quit_flag = Arc::clone(&self.quit_flag);
             let interrupt_flag = Arc::clone(&self.interrupt_flag);

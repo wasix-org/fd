@@ -1,3 +1,5 @@
+> **WASIX port:** See [WASIX.md](WASIX.md) for reproducible builds, tests, port patches, and the `wasmer/fd` package.
+
 # fd
 
 [![CICD](https://github.com/sharkdp/fd/actions/workflows/CICD.yml/badge.svg)](https://github.com/sharkdp/fd/actions/workflows/CICD.yml)

@@ -1,3 +1,4 @@
+#![cfg_attr(target_os = "wasi", feature(wasi_ext))]
 mod cli;
 mod config;
 mod dir_entry;

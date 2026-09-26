@@ -5,6 +5,8 @@ use std::fs;
 use std::io;
 #[cfg(any(unix, target_os = "redox"))]
 use std::os::unix::fs::FileTypeExt;
+#[cfg(target_os = "wasi")]
+use std::os::wasi::fs::FileTypeExt;
 use std::path::{Path, PathBuf};
 
 use normpath::PathExt;
@@ -59,7 +61,7 @@ pub fn is_empty(entry: &dir_entry::DirEntry) -> bool {
     }
 }
 
-#[cfg(any(unix, target_os = "redox"))]
+#[cfg(any(unix, target_os = "redox", target_os = "wasi"))]
 pub fn is_block_device(ft: fs::FileType) -> bool {
     ft.is_block_device()
 }
@@ -69,7 +71,7 @@ pub fn is_block_device(_: fs::FileType) -> bool {
     false
 }
 
-#[cfg(any(unix, target_os = "redox"))]
+#[cfg(any(unix, target_os = "redox", target_os = "wasi"))]
 pub fn is_char_device(ft: fs::FileType) -> bool {
     ft.is_char_device()
 }
@@ -84,6 +86,11 @@ pub fn is_socket(ft: fs::FileType) -> bool {
     ft.is_socket()
 }
 
+#[cfg(target_os = "wasi")]
+pub fn is_socket(ft: fs::FileType) -> bool {
+    ft.is_socket_stream() || ft.is_socket_dgram()
+}
+
 #[cfg(windows)]
 pub fn is_socket(_: fs::FileType) -> bool {
     false
@@ -94,6 +101,12 @@ pub fn is_pipe(ft: fs::FileType) -> bool {
     ft.is_fifo()
 }
 
+#[cfg(target_os = "wasi")]
+pub fn is_pipe(_: fs::FileType) -> bool {
+    // WASI file metadata does not distinguish named pipes.
+    false
+}
+
 #[cfg(windows)]
 pub fn is_pipe(_: fs::FileType) -> bool {
     false
@@ -102,6 +115,12 @@ pub fn is_pipe(_: fs::FileType) -> bool {
 #[cfg(any(unix, target_os = "redox"))]
 pub fn osstr_to_bytes(input: &OsStr) -> Cow<'_, [u8]> {
     use std::os::unix::ffi::OsStrExt;
+    Cow::Borrowed(input.as_bytes())
+}
+
+#[cfg(target_os = "wasi")]
+pub fn osstr_to_bytes(input: &OsStr) -> Cow<'_, [u8]> {
+    use std::os::wasi::ffi::OsStrExt;
     Cow::Borrowed(input.as_bytes())
 }
 

@@ -37,7 +37,6 @@ argmax = "0.4.0"
 ignore = "0.4.25"
 regex = "1.12.2"
 regex-syntax = "0.8"
-ctrlc = "3.5"
 globset = "0.4"
 anyhow = "1.0"
 etcetera = "0.11"
@@ -55,6 +54,9 @@ features = ["suggestions", "color", "wrap_help", "cargo", "derive"]
 version = "0.21"
 default-features = false
 features = ["nu-ansi-term"]
+
+[target.'cfg(not(target_os = "wasi"))'.dependencies]
+ctrlc = "3.5"
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.31.1", default-features = false, features = ["signal", "user", "hostname"] }
@@ -113,3 +115,12 @@ pkg-fmt = "zip"
 
 [package.metadata.binstall.overrides.aarch64-pc-windows-msvc]
 pkg-fmt = "zip"
+
+[package.metadata]
+wasm-name-section = false
+wasm-producers-section = false
+
+[patch.crates-io]
+ignore = { path = ".wasix/deps/ignore-0.4.30" }
+same-file = { path = ".wasix/deps/same-file-1.0.6" }
+walkdir = { path = ".wasix/deps/walkdir-2.5.0" }

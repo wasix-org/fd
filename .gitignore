@@ -1,3 +1,6 @@
 target/
 /autocomplete/
 **/*.rs.bk
+
+# WASIX build outputs and downloaded dependencies
+/.wasix/
